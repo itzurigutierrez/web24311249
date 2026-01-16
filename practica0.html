@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Conversor USD a Pesos MX</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding-top: 50px; background: #f0f4f7; }
+        .card { background: white; padding: 2.5rem; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 320px; text-align: center; border-top: 5px solid #075e54; }
+        input { width: 90%; padding: 12px; margin: 15px 0; border: 2px solid #ddd; border-radius: 8px; font-size: 1.2rem; outline: none; transition: border-color 0.3s; }
+        input:focus { border-color: #075e54; }
+        .resultado { font-size: 1.8rem; color: #1a1a1a; font-weight: bold; margin-top: 20px; background: #e8f5e9; padding: 15px; border-radius: 8px; }
+        h3 { color: #2c3e50; margin-bottom: 5px; }
+        span { color: #7f8c8d; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+ 
+<div class="card">
+    <h3>Dólares a Pesos</h3>
+    <span>(Tipo de cambio en tiempo real)</span>
+   
+    <input type="number" id="usdInput" placeholder="Monto en USD" oninput="convertir()">
+   
+    <div class="resultado" id="resultadoMXN">$ 0.00 MXN</div>
+    <p style="font-size: 0.75rem; color: #95a5a6; margin-top: 15px;">Servicio provisto por ExchangeRate-API</p>
+</div>
+ 
+<script>
+    async function convertir() {
+        const input = document.getElementById('usdInput').value;
+        const display = document.getElementById('resultadoMXN');
+ 
+        if (input <= 0 || input == "") {
+            display.innerText = "$ 0.00 MXN";
+            return;
+        }
+ 
+        try {
+            // Llamada al servicio
+            const respuesta = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+            const datos = await respuesta.json();
+ 
+            // CAMBIO CLAVE: Ahora accedemos a .MXN en lugar de .EUR
+            const tasaPeso = datos.rates.MXN;
+            const calculo = (input * tasaPeso).toFixed(2);
+ 
+            // Mostrar el resultado con formato mexicano
+            display.innerText = `$ ${calculo} MXN`;
+        } catch (error) {
+            display.innerText = "Error de conexión";
+            console.error(error);
+        }
+    }
+</script>
+ 
+</body>
+</html>
+
+
