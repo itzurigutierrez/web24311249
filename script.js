@@ -1,4 +1,4 @@
-alert("JS conectado 😈");
+alert("Si ves esto eres kiuti");
 
 let count = 0;
 
